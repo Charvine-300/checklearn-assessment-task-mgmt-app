@@ -1,30 +1,39 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+  import './style.css'
+  import Header from './components/Header.vue'
+  import AddTask from './components/AddTask.vue'
+  import TaskList from './components/TaskList.vue'
+  import { ref, provide } from 'vue'
+  
+
+  const isModalOpen = ref(false);
+
+const handleModalToggle = (isOpen) => {
+  isModalOpen.value = isOpen;
+};
+
+provide('isModalOpen', isModalOpen); // Providing the state
+provide('handleModalToggle', handleModalToggle); // Providing the method
+
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+<div class="bg-neutral-veryDarkBlue w-screen h-screen flex flex-col">
+  <!-- BG Image -->
+  <div class="bg-custom-bg top-0 bg-cover bg-center max-h-[200px] lg:max-h-[300px] h-full w-full bg-image fixed"></div>
+
+  <div class="z-[100] w-[90%] mx-auto lg:w-[40%]">
+    <Header />
+
+    <AddTask @toggle-modal="handleModalToggle" />
+    
+    <TaskList />
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+
+</div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
