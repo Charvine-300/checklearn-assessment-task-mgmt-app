@@ -15,24 +15,27 @@ import Task from './Task.vue';
  });
 
  const isModalOpen = inject('isModalOpen'); // Injecting the state
+ const isTaskUpdated = inject('task-updated'); // Injecting the state
 const handleModalToggle = inject('handleModalToggle'); // Injecting the method
 
-onMounted(() => {
-  const storedTasks = JSON.parse(localStorage.getItem('tasks'));
+// Initial load of tasks
+const loadTasks = () => {
+  state.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+};
 
-  if (storedTasks) {
-    state.tasks = storedTasks;
-  }
+
+
+onMounted(() => {
+  loadTasks(); // Load tasks when the component mounts
 });
 
-watch(isModalOpen, (newVal) => {
-  if (!newVal) {
-    // Logic to refresh tasks when modal closes
+watch([isModalOpen, isTaskUpdated], (newVal) => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks'));
     if (storedTasks) {
       state.tasks = storedTasks;
     }
-  }
+
+    console.log(state.tasks);
 });
 </script>
 
@@ -42,6 +45,6 @@ watch(isModalOpen, (newVal) => {
        <p> No Tasks </p>
     </div>
 
-<Task v-for="(task, idx) in state.tasks" :key="idx" :task="task" />
+<Task v-for="(task, idx) in state.tasks" :key="idx" :task="task" :index="idx" @task-updated="loadTasks" />
 </div>
 </template>

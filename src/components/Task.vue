@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, defineEmits } from 'vue';
 import Delete from '../assets/icons/delete.png';
 import Edit from '../assets/icons/edit.png';
 
@@ -8,11 +8,14 @@ const props = defineProps({
   index: Number
 });
 
+const emit = defineEmits(['toggle-modal', 'task-updated']);
+
 const handleComplete = () => {
   const tasks = JSON.parse(localStorage.getItem('tasks'));
 
   if (tasks && tasks[props.index]) {
-    tasks[props.index].completed = true;
+
+    tasks[props.index].completed = tasks[props.index].completed ? false : true;
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }
 
@@ -24,12 +27,12 @@ const handleComplete = () => {
 <template>
   <div class="w-full p-5 bg-neutral-veryDarkDesaturatedBlue flex justify-between items-center rounded-t border-b border-neutral-lightGrayishBlue">
     <div class="gap-3 flex items-center">
-      <input type="checkbox" :checked="task.complete" :name="task.task_name" :id="task.task_name" class="w-[20px] h-[20px] rounded-full border border-neutral-lightGrayishBlue" />
+      <input type="checkbox" :checked="task.completed" :name="task.task_name" :id="task.task_name" class="w-[20px] h-[20px] rounded-full border border-neutral-lightGrayishBlue" @click="handleComplete" />
       <div class="text-neutral-lightGrayishBlue">
-        <p>
+        <p :class="{ 'line-through': task.completed }">
           {{  task.task_name  }}
         </p>
-        <p class="font-light"> Due Date: {{ task.due_date }} </p>
+        <p :class="{ 'line-through': task.completed }" style="font-weight: 300;"> Due Date: {{ task.due_date }} </p>
       </div>
     </div>
     <div class="gap-3 flex items-center" v-if="!task.completed">
