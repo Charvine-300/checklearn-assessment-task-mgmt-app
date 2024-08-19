@@ -16,6 +16,7 @@ import Task from './Task.vue';
 
  const isModalOpen = inject('isModalOpen'); // Injecting the state
  const isTaskUpdated = inject('task-updated'); // Injecting the state
+ const isTaskEditModal = inject('toggle-modal'); // Injecting the state
 const handleModalToggle = inject('handleModalToggle'); // Injecting the method
 
 // Initial load of tasks
@@ -29,7 +30,7 @@ onMounted(() => {
   loadTasks(); // Load tasks when the component mounts
 });
 
-watch([isModalOpen, isTaskUpdated], (newVal) => {
+watch([isModalOpen, isTaskUpdated, isTaskEditModal], (newVal) => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks'));
     if (storedTasks) {
       state.tasks = storedTasks;

@@ -2,13 +2,22 @@
 import { defineProps, ref, defineEmits } from 'vue';
 import Delete from '../assets/icons/delete.png';
 import Edit from '../assets/icons/edit.png';
+import EditTask from './EditTask.vue'
+
+const openEditTaskModal = ref(false);
+
+const handleModal = () => {
+  console.log("regina george")
+    openEditTaskModal.value = true;
+  }
+
 
 const props = defineProps({
   task: Object,
   index: Number
 });
 
-const emit = defineEmits(['toggle-modal', 'task-updated']);
+const emit = defineEmits(['toggle-modal', 'task-updated', 'update:open']);
 
 const handleComplete = () => {
   const tasks = JSON.parse(localStorage.getItem('tasks'));
@@ -36,8 +45,11 @@ const handleComplete = () => {
       </div>
     </div>
     <div class="gap-3 flex items-center" v-if="!task.completed">
-      <img :src="Edit" alt="edit icon" class="w-[20px] h-[20px] cursor-pointer" />
+      <img :src="Edit" alt="edit icon" class="w-[20px] h-[20px] cursor-pointer" @click="handleModal" />
       <img :src="Delete" alt="delete icon" class="w-[20px] h-[20px] cursor-pointer" />
     </div>
   </div>
+
+  <!-- Edit and Delete features -->
+   <EditTask :id="index" :task="task" :open="openEditTaskModal"  @update:open="openEditTaskModal = $event" />
 </template>
