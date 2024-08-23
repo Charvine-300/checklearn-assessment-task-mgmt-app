@@ -1,15 +1,20 @@
 <script setup>
-import { defineProps, ref, defineEmits } from 'vue';
+import { defineProps, ref, defineEmits, computed } from 'vue';
 import Delete from '../assets/icons/delete.png';
 import Edit from '../assets/icons/edit.png';
 import EditTask from './EditTask.vue'
+import DeleteTask from './DeleteTask.vue'
 
 const openEditTaskModal = ref(false);
+const openDeleteTaskModal = ref(false);
 
-const handleModal = () => {
-  console.log("regina george")
+const handleEditModal = () => {
     openEditTaskModal.value = true;
-  }
+}
+
+const handleDeleteTaskModal = () => {
+  openDeleteTaskModal.value = true;
+}
 
 
 const props = defineProps({
@@ -31,6 +36,26 @@ const handleComplete = () => {
   // Emit event to refresh task list
   emit('task-updated');
 };
+
+// Trigger task list refresh from EditTask event
+const taskUpdate = () => {
+  emit('task-updated');
+}
+
+// Compute the circle color class based on task.completed
+const circleColorClass = computed(() => {
+  switch (props.task.priority) {
+    case 'Low':
+      return 'bg-green-500';
+    case 'Medium':
+      return 'bg-yellow-500';
+    case 'High':
+      return 'bg-red-500';
+    default:
+      return 'bg-gray-500'; // Default color if priority is not recognized
+  }
+});
+
 </script>
 
 <template>
@@ -38,18 +63,22 @@ const handleComplete = () => {
     <div class="gap-3 flex items-center">
       <input type="checkbox" :checked="task.completed" :name="task.task_name" :id="task.task_name" class="w-[20px] h-[20px] rounded-full border border-neutral-lightGrayishBlue" @click="handleComplete" />
       <div class="text-neutral-lightGrayishBlue">
-        <p :class="{ 'line-through': task.completed }">
-          {{  task.task_name  }}
-        </p>
-        <p :class="{ 'line-through': task.completed }" style="font-weight: 300;"> Due Date: {{ task.due_date }} </p>
+        <div class="flex flex-row items-center gap-2">
+          <p :class="{ 'line-through': task.completed }">
+            {{  task.task_name  }}
+          </p>
+          <span :class="circleColorClass" class="w-2 h-2 rounded-full cursor-pointer" :title="task.priority"></span>
+        </div>
+        <p :class="{ 'line-through': task.completed }" style="font-weight: 300;" v-if="task.due_date"> Due Date: {{ task.due_date }} </p>
       </div>
     </div>
-    <div class="gap-3 flex items-center" v-if="!task.completed">
-      <img :src="Edit" alt="edit icon" class="w-[20px] h-[20px] cursor-pointer" @click="handleModal" />
-      <img :src="Delete" alt="delete icon" class="w-[20px] h-[20px] cursor-pointer" />
+    <div class="gap-3 flex items-center">
+      <img :src="Edit" alt="edit icon" class="w-[20px] h-[20px] cursor-pointer" @click="handleEditModal" v-if="!task.completed" />
+      <img :src="Delete" alt="delete icon" class="w-[20px] h-[20px] cursor-pointer" @click="handleDeleteTaskModal" />
     </div>
   </div>
 
   <!-- Edit and Delete features -->
-   <EditTask :id="index" :task="task" :open="openEditTaskModal"  @update:open="openEditTaskModal = $event" />
+   <EditTask :id="index" :task="task" :open="openEditTaskModal"  @update:open="openEditTaskModal = $event" @task-edited="taskUpdate" />
+   <DeleteTask :id="index" :task="task" :open="openDeleteTaskModal" @update:open="openDeleteTaskModal = $event" @task-deleted="taskUpdate"   />
 </template>

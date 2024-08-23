@@ -1,7 +1,6 @@
 <script setup>
-import AddIcon from '../assets/icons/add-icon.png';
 import CloseModal from '../assets/icons/close.png';
-import { ref, reactive, watch, defineEmits, defineProps, onMounted } from 'vue'
+import { reactive, defineEmits, defineProps, onMounted } from 'vue'
 
 const props = defineProps({
   task: Object,
@@ -9,12 +8,7 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['task-updated', 'update:open']);
-
-// Emit the event when modal state changes
-watch(() => props.open, (newVal) => {
-  emit('toggle-modal', newVal);
-});
+const emit = defineEmits(['task-edited', 'update:open']);
 
 const handleModal = () => {
   emit('update:open', !props.open); // Notify the parent to toggle the open value
@@ -26,11 +20,6 @@ const form = reactive({
   priority: '',
 });
 
-// :oad of tasks
-const loadTasks = () => {
-  state.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-};
-
 
 
 onMounted(() => {
@@ -40,7 +29,8 @@ onMounted(() => {
 });
 
 const handleEditTask = () => {
-    console.log("task no: ", props.id)
+    // console.log("task no: ", props.id)
+
     const updatedTask = {
     task_name: form.taskName,
     due_date: form.dueDate,
@@ -66,7 +56,7 @@ const handleEditTask = () => {
 handleModal();
 
 // Alert TaskList to refresh the list
-emit('task-updated');
+emit('task-edited');
   } else {
     console.error('Task not found or invalid id');
   }
@@ -78,9 +68,9 @@ emit('task-updated');
 <template>
     <!-- Edit Task Modal -->
      <div class="text-neutral-lightGrayishBlue fixed inset-0 w-full h-full backdrop-blur flex items-center justify-center fade-in overflow-y-scroll" v-if="props.open">
-      <div class="p-5 bg-neutral-veryDarkDesaturatedBlue rounded-lg shadow-form w-[90%] max-w-[400px]">
+      <div class="p-5 bg-neutral-veryDarkGrayishBlue2 rounded-lg shadow-form w-[90%] max-w-[400px]">
         <div class="flex items-center justify-between gap-2 w-full mt-3 mb-5">
-          <h3 class="font-bold text-lg"> edit task </h3>
+          <h3 class="font-bold text-lg capitalize"> edit task </h3>
           <img :src="CloseModal" alt="close icon" class="w-[30px] h-[30px] cursor-pointer" @click="handleModal" />
         </div>
 

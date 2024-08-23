@@ -18,7 +18,7 @@ provide('handleModalToggle', handleModalToggle); // Providing the method
 </script>
 
 <template>
-<div class="bg-neutral-veryDarkBlue w-screen h-screen flex flex-col">
+<div class="bg-neutral-veryDarkBlue w-screen h-screen flex flex-col overflow-y-scroll">
   <!-- BG Image -->
   <div class="bg-custom-bg top-0 bg-cover bg-center max-h-[200px] lg:max-h-[300px] h-full w-full bg-image fixed"></div>
 

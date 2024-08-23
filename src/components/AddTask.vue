@@ -1,7 +1,7 @@
 <script setup>
 import AddIcon from '../assets/icons/add-icon.png';
 import CloseModal from '../assets/icons/close.png';
-import { ref, reactive, watch, defineEmits } from 'vue'
+import { ref, reactive, watch, defineEmits, onMounted } from 'vue'
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -52,9 +52,17 @@ tasks.push(newTask);
 // Save the updated array back to localStorage
 localStorage.setItem('tasks', JSON.stringify(tasks));
 
+
 // Close modal
 openAddTaskModal.value = false;
 }
+
+onMounted(() => {
+// Clear form
+form.taskName = "";
+form.dueDate = "";
+form.priority = "Low";
+})
 
 </script>
 
@@ -66,9 +74,9 @@ openAddTaskModal.value = false;
 
     <!-- Add Task Modal -->
      <div class="text-neutral-lightGrayishBlue fixed inset-0 w-full h-full backdrop-blur flex items-center justify-center fade-in overflow-y-scroll" v-if="openAddTaskModal">
-      <div class="p-5 bg-neutral-veryDarkDesaturatedBlue rounded-lg shadow-form w-[90%] max-w-[400px]">
+      <div class="p-5 bg-neutral-veryDarkGrayishBlue2 rounded-lg shadow-form w-[90%] max-w-[400px]">
         <div class="flex items-center justify-between gap-2 w-full mt-3 mb-5">
-          <h3 class="font-bold text-lg"> Add new task </h3>
+          <h3 class="font-bold text-lg capitalize"> Add new task </h3>
           <img :src="CloseModal" alt="close icon" class="w-[30px] h-[30px] cursor-pointer" @click="handleModal" />
         </div>
 
@@ -81,15 +89,13 @@ openAddTaskModal.value = false;
           </div>
 
           <div class="mb-6">
-            <label for="due_date" class="block font-semibold mb-2">Due Date</label>
-          <input type="date" :min="today" id="due_date" name="due_date" class= "border border-neutral-lightGrayishBlue rounded w-full p-3 mb-2 bg-transparent placeholder:text-neutral-lightGrayishBlue placeholder:text-sm" v-model="form.dueDate"
-          placeholder="eg. Wash dishes" required />
+            <label for="due_date" class="block font-semibold mb-2">Due Date (Optional)</label>
+          <input type="date" :min="today" id="due_date" name="due_date" class= "border border-neutral-lightGrayishBlue rounded w-full p-3 mb-2 bg-transparent placeholder:text-neutral-lightGrayishBlue placeholder:text-sm" v-model="form.dueDate" />
           </div>
 
           <div class="mb-6">
             <label for="priority_level" class="block font-semibold mb-2">Priority Level</label>
-          <select id="priority_level" name="priority_level" class= "border border-neutral-lightGrayishBlue rounded w-full p-3 mb-2 bg-transparent placeholder:text-neutral-lightGrayishBlue placeholder:text-sm" v-model="form.priority"
-          placeholder="eg. Wash dishes" required>
+          <select id="priority_level" name="priority_level" class= "border border-neutral-lightGrayishBlue rounded w-full p-3 mb-2 bg-transparent placeholder:text-neutral-lightGrayishBlue placeholder:text-sm" v-model="form.priority" required>
           <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
