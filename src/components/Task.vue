@@ -46,13 +46,13 @@ const taskUpdate = () => {
 const circleColorClass = computed(() => {
   switch (props.task.priority) {
     case 'Low':
-      return 'bg-green-500';
+      return 1;
     case 'Medium':
-      return 'bg-yellow-500';
+      return 2;
     case 'High':
-      return 'bg-red-500';
+      return 3;
     default:
-      return 'bg-gray-500'; // Default color if priority is not recognized
+      return 0;
   }
 });
 
@@ -67,7 +67,10 @@ const circleColorClass = computed(() => {
           <p :class="{ 'line-through': task.completed }">
             {{  task.task_name  }}
           </p>
-          <span :class="circleColorClass" class="w-2 h-2 rounded-full cursor-pointer" :title="task.priority"></span>
+          <div>
+            <p v-for="idx in circleColorClass" :key="idx" class="text-primary-brightBlue inline"> ! </p>
+            <span :class="circleColorClass" class="w-2 h-2 rounded-full cursor-pointer" :title="task.priority"></span>
+          </div>
         </div>
         <p :class="{ 'line-through': task.completed }" style="font-weight: 300;" v-if="task.due_date"> Due Date: {{ task.due_date }} </p>
       </div>

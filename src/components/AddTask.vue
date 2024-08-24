@@ -2,6 +2,8 @@
 import AddIcon from '../assets/icons/add-icon.png';
 import CloseModal from '../assets/icons/close.png';
 import { ref, reactive, watch, defineEmits, onMounted } from 'vue'
+import { addTaskToList } from '../composables/tasks';
+
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -29,32 +31,10 @@ const form = reactive({
 });
 
 const handleSubmit = () => {
-  console.log(form);
+  addTaskToList(form);
 
-  const newTask = {
-    task_name: form.taskName,
-    due_date: form.dueDate,
-    priority: form.priority,
-    completed: false,
-  };
-
-  // Get the array from localStorage
-let tasks = JSON.parse(localStorage.getItem('tasks'));
-
-// If it doesn't exist, create a new array
-if (!tasks) {
-  tasks = [];
-}
-
-// Add the new task to the array
-tasks.push(newTask);
-
-// Save the updated array back to localStorage
-localStorage.setItem('tasks', JSON.stringify(tasks));
-
-
-// Close modal
-openAddTaskModal.value = false;
+  // Close modal
+  handleModal();
 }
 
 onMounted(() => {
