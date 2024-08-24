@@ -1,7 +1,7 @@
 <script setup>
 import AddIcon from '../assets/icons/add-icon.png';
 import CloseModal from '../assets/icons/close.png';
-import { ref, reactive, watch, defineEmits, onMounted } from 'vue'
+import { ref, reactive, watch, defineEmits } from 'vue'
 import { editTaskList } from '../composables/tasks';
 
 
@@ -31,18 +31,16 @@ const form = reactive({
 });
 
 const handleSubmit = () => {
-  editTaskList(form, "add");
+  editTaskList("add", form);
+
+  // Clear form
+form.taskName = "";
+form.dueDate = "";
+form.priority = "Low";
 
   // Close modal
   handleModal();
 }
-
-onMounted(() => {
-// Clear form
-form.taskName = "";
-form.dueDate = "";
-form.priority = "Low";
-})
 
 </script>
 

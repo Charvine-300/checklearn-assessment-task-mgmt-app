@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 import CloseModal from '../assets/icons/close.png';
+import { editTaskList } from '../composables/tasks';
 
 const props = defineProps({
   task: Object,
@@ -15,27 +16,13 @@ const handleModal = () => {
 };
 
 const handleDeleteTask = () => {
-  // Get the array from localStorage
-  let tasks = JSON.parse(localStorage.getItem('tasks'));
-
-  // Check if tasks exist and the id is valid
-  if (tasks && props.id >= 0 && props.id < tasks.length) {
-    // Remove the task at the specified id
-    tasks.splice(props.id, 1);
-
-    // Save the updated array back to localStorage
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
+  props.task['id'] = props.id;
+  
+  editTaskList('delete', props.task)
     // Close modal
     handleModal();
 
-    // Alert TaskList to refresh the list
-    emit('task-deleted');
-  } else {
-    console.error('Task not found or invalid id');
-  }
 };
-
 
 </script>
 

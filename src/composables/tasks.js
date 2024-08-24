@@ -1,4 +1,4 @@
-import { reactive, onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 
 const state = reactive({
     tasks: []
@@ -16,7 +16,8 @@ function useTasksList() {
 };
 
 // Add task to list
-function editTaskList(task, action) {
+function editTaskList(action, task = {}) {
+    // console.log("editing task...")
     const updatedTask = {
         task_name: task.taskName,
         due_date: task.dueDate,
@@ -36,13 +37,21 @@ function editTaskList(task, action) {
             tasks.push(updatedTask);
             break;
         case 'edit':
+        case 'delete':
               // Check if tasks exist and the id is valid
   if (tasks && task.id >= 0 && task.id < tasks.length) {
-    // Update the task at the specified id
-    tasks[task.id] = {
-      ...tasks[task.id],
-      ...updatedTask,
-    };
+
+    if (action === 'edit') {
+        // Update the task at the specified id
+        tasks[task.id] = {
+          ...tasks[task.id],
+          ...updatedTask,
+        };
+    } else if (action === 'delete') {
+        // console.log('testing', task.id);
+
+        tasks.splice(task.id, 1);
+    }
   } else {
     console.error('Task not found or invalid id');
   }

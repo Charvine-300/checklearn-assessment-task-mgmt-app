@@ -82,6 +82,6 @@ const circleColorClass = computed(() => {
   </div>
 
   <!-- Edit and Delete features -->
-   <EditTask :id="index" :task="task" :open="openEditTaskModal"  @update:open="openEditTaskModal = $event" @task-edited="taskUpdate" />
-   <DeleteTask :id="index" :task="task" :open="openDeleteTaskModal" @update:open="openDeleteTaskModal = $event" @task-deleted="taskUpdate"   />
+   <EditTask :id="index" :task="task" :open="openEditTaskModal"  @update:open="openEditTaskModal = $event" />
+   <DeleteTask :id="index" :task="task" :open="openDeleteTaskModal" @update:open="openDeleteTaskModal = $event" />
 </template>

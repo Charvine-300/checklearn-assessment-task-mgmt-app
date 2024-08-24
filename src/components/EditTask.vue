@@ -31,7 +31,7 @@ onMounted(() => {
 });
 
 const handleEditTask = () => {
-  editTaskList(form, 'edit');
+  editTaskList('edit', form);
 
   // Close modal
   handleModal();

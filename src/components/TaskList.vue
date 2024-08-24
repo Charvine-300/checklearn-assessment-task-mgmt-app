@@ -1,31 +1,10 @@
 <script setup>
-import { ref, onMounted, reactive, watch, inject } from 'vue';
 import Task from './Task.vue';
 import { useTasksList } from '../composables/tasks';
-
-
- const isModalOpen = inject('isModalOpen');
 
 //  Tasks list from composable
  const { state } = useTasksList();
 
-// Initial load of tasks
-// const loadTasks = () => {
-//   state.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-// };
-
-// onMounted(() => {
-//   loadTasks(); // Load tasks when the component mounts
-// });
-
-// watch([isModalOpen], () => {
-//     const storedTasks = JSON.parse(localStorage.getItem('tasks'));
-//     if (storedTasks) {
-//       state.tasks = storedTasks;
-//     }
-
-//     console.log(state.tasks);
-// });
 </script>
 
 <template>
@@ -34,8 +13,6 @@ import { useTasksList } from '../composables/tasks';
        <p> No Tasks </p>
     </div>
 
-<Task v-for="(task, idx) in state.tasks" :key="idx" :task="task" :index="idx" 
-@task-updated="loadTasks" 
-/>
+<Task v-for="(task, idx) in state.tasks" :key="idx" :task="task" :index="idx" />
 </div>
 </template>
