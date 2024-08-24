@@ -6,22 +6,22 @@ const state = reactive({
 
 // Fetching Tasks list
 function useTasksList() {
-   ;
+    ;
 
-onMounted(() => {
-    state.tasks = JSON.parse(localStorage.getItem('tasks')) || [];  
-});
+    onMounted(() => {
+        state.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    });
 
-return { state };
+    return { state };
 };
 
 // Add task to list
-function addTaskToList(task) {
-    const newTask = {
+function editTaskList(task, action) {
+    const updatedTask = {
         task_name: task.taskName,
         due_date: task.dueDate,
         priority: task.priority,
-        completed: false,
+        completed: task.completed ?? false,
     };
 
     let tasks = JSON.parse(localStorage.getItem('tasks'));
@@ -30,13 +30,34 @@ function addTaskToList(task) {
         tasks = [];
     }
 
-    tasks.push(newTask);
+    // Alter tasks list according to action
+    switch(action) {
+        case 'add':
+            tasks.push(updatedTask);
+            break;
+        case 'edit':
+              // Check if tasks exist and the id is valid
+  if (tasks && task.id >= 0 && task.id < tasks.length) {
+    // Update the task at the specified id
+    tasks[task.id] = {
+      ...tasks[task.id],
+      ...updatedTask,
+    };
+  } else {
+    console.error('Task not found or invalid id');
+  }
+  break;
+        default:
+            break;
+    }
 
+    // Update storage
     localStorage.setItem('tasks', JSON.stringify(tasks));
     state.tasks = tasks;
-}
+};
+
 
 export {
     useTasksList,
-    addTaskToList
+    editTaskList
 }

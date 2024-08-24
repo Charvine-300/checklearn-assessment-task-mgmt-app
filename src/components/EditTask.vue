@@ -1,6 +1,7 @@
 <script setup>
 import CloseModal from '../assets/icons/close.png';
 import { reactive, defineEmits, defineProps, onMounted } from 'vue'
+import { editTaskList } from '../composables/tasks';
 
 const props = defineProps({
   task: Object,
@@ -26,40 +27,14 @@ onMounted(() => {
   form.taskName = props.task.task_name
   form.dueDate = props.task.due_date
   form.priority = props.task.priority 
+  form.id = props.id
 });
 
 const handleEditTask = () => {
-    // console.log("task no: ", props.id)
+  editTaskList(form, 'edit');
 
-    const updatedTask = {
-    task_name: form.taskName,
-    due_date: form.dueDate,
-    priority: form.priority,
-    completed: props.task.completed,
-  };
-
-  // Get the array from localStorage
-  let tasks = JSON.parse(localStorage.getItem('tasks'));
-
-  // Check if tasks exist and the id is valid
-  if (tasks && props.id >= 0 && props.id < tasks.length) {
-    // Update the task at the specified id
-    tasks[props.id] = {
-      ...tasks[props.id],
-      ...updatedTask,
-    };
-
-    // Save the updated array back to localStorage
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
-// Close modal
-handleModal();
-
-// Alert TaskList to refresh the list
-emit('task-edited');
-  } else {
-    console.error('Task not found or invalid id');
-  }
+  // Close modal
+  handleModal();
 };
 
 

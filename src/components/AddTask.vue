@@ -2,7 +2,7 @@
 import AddIcon from '../assets/icons/add-icon.png';
 import CloseModal from '../assets/icons/close.png';
 import { ref, reactive, watch, defineEmits, onMounted } from 'vue'
-import { addTaskToList } from '../composables/tasks';
+import { editTaskList } from '../composables/tasks';
 
 
 const today = new Date().toISOString().split('T')[0];
@@ -31,7 +31,7 @@ const form = reactive({
 });
 
 const handleSubmit = () => {
-  addTaskToList(form);
+  editTaskList(form, "add");
 
   // Close modal
   handleModal();
